@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Halaman Login</title>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+
+    <body>
+        <div class="container">
+          <h1>Register</h1>
+            <form action="/inputArticle" method="post">
+                <label>Pengarang</label>
+                <br>
+                <input type="text" name="pengarang">
+                <br>
+                <label>Judul</label>
+                <br>
+                <input type="text" name="judul">
+                <br>
+                <label>Isi</Isindex></label>
+                <br>
+                <textarea name="isi">Isi Artikel</textarea>
+                <label>Tanggal</label>
+                <br>
+                <input type="date" name="tanggal">
+                <br>
+                <label>Gambar</label>
+                <br>
+                <input type="file" name="gambar">
+                <br>
+                <button>Register</button>
+                <p> Sudah punya akun?
+                  <a href="index.html">Login di sini</a>
+                </p>
+            </form>
+        </div>
+        <div>
+            <form action="/getArticle/(:id)" method="get">
+                <label>ID</label>
+                <br>
+                <input type="text" name="id">
+                <button>Submit</button>
+            </form>
+        </div>
+    </body>
+</html>
