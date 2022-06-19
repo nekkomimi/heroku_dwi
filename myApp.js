@@ -7,8 +7,8 @@ const { rejects } = require('assert');
 
 const connection = mysql.createConnection({
     host: 'localhost',
-    user: 'ariel',
-    password: '123',
+    user: 'root',
+    password: '',
     database: 'portal_data'
 })
 
@@ -26,6 +26,7 @@ app.get('/', (req, res)=>{
     res.sendFile(path.join(__dirname,'/public/index.html'))
 });
 
+//Get Article
 app.get('/getArticle', (req, res)=>{
     connection.query(
         'SELECT * FROM article',
@@ -46,9 +47,10 @@ app.get('/getArticle', (req, res)=>{
     )
 });
 
+//Get Article With ID
 app.get('/getArticle/:id', (req, res)=>{
     connection.query(
-        'SELECT * FROM article WHERE id = ?',
+        'SELECT * FROM article WHERE id = ',
         [req.params.id],
         (error, results)=>{
             res.send(results)
@@ -56,10 +58,11 @@ app.get('/getArticle/:id', (req, res)=>{
     )
 });
 
+//Input Article
 app.post('/inputArticle', (req, res)=>{
     connection.query(
         'INSERT INTO article(pengarang, judul, isi, tanggal) VALUES (?,?,?,?)',
-        [req.body.pengarang, req.body.judul, req.body.isi, req.body.tanggal, req.body.gambar],
+        [req.body.pengarang, req.body.judul, req.body.isi, req.body.tanggal],
         (error, results)=>{
             connection.query(
                 'SELECT * FROM article',
@@ -67,10 +70,14 @@ app.post('/inputArticle', (req, res)=>{
                     console.log(results)
                 }
             )
+            res.redirect('/');
+            
         }
     )
+    
 });
 
+//Update Article
 app.patch('/update/:id', (req, res)=>{
     connection.query(
         'UPDATE article SET (judul, isi) WHERE id = ?',
@@ -85,6 +92,8 @@ app.get('/delete', (req, res)=>{
     res.sendFile(path.join(__dirname, '/public/delete.html'))
 })
 
+
+//Delete Article
 app.delete('/delete/:id', (req, res)=>{
     connection.query(
         'DELETE FROM article WHERE id = ?',
@@ -101,6 +110,15 @@ app.delete('/delete/:id', (req, res)=>{
                     )
                 }
             )
+        }
+    )
+})
+
+app.get('/getUser', (req, res)=>{
+    connection.query(
+        'SELECT * FROM users',
+        (error, results)=>{
+            res.send(results)
         }
     )
 })
