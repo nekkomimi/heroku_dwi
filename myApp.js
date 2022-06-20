@@ -7,8 +7,8 @@ const { rejects } = require('assert');
 
 const connection = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
-    password: '',
+    user: 'ariel',
+    password: '123',
     database: 'portal_data'
 })
 
@@ -26,7 +26,6 @@ app.get('/', (req, res)=>{
     res.sendFile(path.join(__dirname,'/public/index.html'))
 });
 
-//Get Article
 app.get('/getArticle', (req, res)=>{
     connection.query(
         'SELECT * FROM article',
@@ -47,10 +46,9 @@ app.get('/getArticle', (req, res)=>{
     )
 });
 
-//Get Article With ID
 app.get('/getArticle/:id', (req, res)=>{
     connection.query(
-        'SELECT * FROM article WHERE id = ',
+        'SELECT * FROM article WHERE id = ?',
         [req.params.id],
         (error, results)=>{
             res.send(results)
@@ -58,69 +56,35 @@ app.get('/getArticle/:id', (req, res)=>{
     )
 });
 
-//Input Article
 app.post('/inputArticle', (req, res)=>{
     connection.query(
         'INSERT INTO article(pengarang, judul, isi, tanggal) VALUES (?,?,?,?)',
-        [req.body.pengarang, req.body.judul, req.body.isi, req.body.tanggal],
+        [req.body.pengarang, req.body.judul, req.body.isi, req.body.tanggal, req.body.gambar],
         (error, results)=>{
-            connection.query(
-                'SELECT * FROM article',
-                (error, results)=>{
-                    console.log(results)
-                }
-            )
-            res.redirect('/');
-            
+            res.redirect('https://portal-berita-galuh.000webhostapp.com/admin/tables.html')
         }
     )
-    
 });
 
-//Update Article
 app.patch('/update/:id', (req, res)=>{
     connection.query(
-        'UPDATE article SET (judul, isi) WHERE id = ?',
-        [req.params.id],
+        'UPDATE article SET (judul, isi) VALUES (?,?) WHERE id = ?',
+        [req.params.id, req.body.judul, req.body.isi],
         (error, results)=>{
             res.send(results)
         }
     )
 })
 
-app.get('/delete', (req, res)=>{
-    res.sendFile(path.join(__dirname, '/public/delete.html'))
-})
-
-
-//Delete Article
-app.delete('/delete/:id', (req, res)=>{
+app.get('/delete/:id', (req, res)=>{
     connection.query(
         'DELETE FROM article WHERE id = ?',
         [req.params.id],
         (error, results)=>{
-            connection.query(
-                'SELECT * FROM article',
-                (error, results)=>{
-                    connection.query(
-                        'SELECT * FROM article',
-                        (error, results)=>{
-                            console.log(results)
-                        }
-                    )
-                }
-            )
+            res.redirect('https://portal-berita-galuh.000webhostapp.com/admin/tables.html')
         }
     )
-})
-
-app.get('/getUser', (req, res)=>{
-    connection.query(
-        'SELECT * FROM users',
-        (error, results)=>{
-            res.send(results)
-        }
-    )
+    
 })
 
 app.listen(3000);
